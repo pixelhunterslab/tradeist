@@ -196,8 +196,14 @@ notepad .env
 ```
 Doldur: `FREQTRADE__TELEGRAM__TOKEN`, `FREQTRADE__TELEGRAM__CHAT_ID`, `FREQTRADE__TELEGRAM__ENABLED=true`,
 FreqUI için `FREQTRADE__API_SERVER__USERNAME` / `PASSWORD`, ve rastgele uzun birer değer olarak
-`JWT_SECRET_KEY` / `WS_TOKEN` (`.env.example` içinde nasıl üretileceği yazıyor). Binance anahtarlarını
-**boş bırak**.
+`JWT_SECRET_KEY` / `WS_TOKEN`. **`JWT_SECRET_KEY` boş veya 32 karakterden kısa olursa bot hiç başlamaz**
+(`docker compose ps` "Restarting" gösterir). Rastgele değer üretip panoya kopyalamak için:
+```powershell
+-join (1..40 | % {[char]((48..57)+(97..122) | Get-Random)}) | Set-Clipboard
+```
+Binance anahtarlarını **boş bırak**.
+
+`.env`'yi sonradan değiştirirsen değişikliklerin geçerli olması için: `docker compose up -d --force-recreate`
 
 ### 4. Başlat
 ```powershell
