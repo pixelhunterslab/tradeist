@@ -170,6 +170,71 @@ Hepsi long + short açabilir, parametre sayısı az (2-3), ve aynı ortak risk k
 - **Çıkış modu** (`exit_mode`): `trailing` (kâr 1R'yi geçince stop ATR mesafesinden takip eder) veya
   `fixed_tp` (`take_profit_rr` × risk kadar kârda kapat).
 
+## Aşama 4: Dry-run'ı (sanal işlem) bilgisayarında başlatma
+
+Dry-run için **Binance API anahtarı GEREKMEZ**; bot herkese açık piyasa verisiyle sanal işlem yapar.
+Anahtarı Aşama 5'e kadar `.env`'e koyma.
+
+### 1. Dosyaları bilgisayarına al
+GitHub'da https://github.com/pixelhunterslab/tradeist → yeşil **Code** düğmesi → **Download ZIP** →
+örneğin `C:\tradeist` klasörüne çıkar. (Git kullanıyorsan: `git clone https://github.com/pixelhunterslab/tradeist C:\tradeist`)
+
+### 2. Telegram botu oluştur
+1. Telegram'da **@BotFather**'a yaz → `/newbot` → bir isim ve kullanıcı adı ver. Sana bir **token** verir
+   (`123456:ABC...` gibi).
+2. Yeni botuna Telegram'da bir mesaj gönder (örn. "merhaba").
+3. Tarayıcıda `https://api.telegram.org/bot<TOKEN>/getUpdates` adresini aç (`<TOKEN>` yerine kendi
+   token'ın). Çıkan yazıda `"chat":{"id":123456789` kısmındaki sayı senin **chat id**'n.
+4. (İsteğe bağlı) ComboTrend gözlem botu için de bildirim istersen @BotFather'dan **ikinci** bir bot
+   oluştur. Aynı token iki botta çalışmaz.
+
+### 3. `.env` dosyasını doldur
+PowerShell'de proje klasöründe:
+```powershell
+Copy-Item .env.example .env
+notepad .env
+```
+Doldur: `FREQTRADE__TELEGRAM__TOKEN`, `FREQTRADE__TELEGRAM__CHAT_ID`, `FREQTRADE__TELEGRAM__ENABLED=true`,
+FreqUI için `FREQTRADE__API_SERVER__USERNAME` / `PASSWORD`, ve rastgele uzun birer değer olarak
+`JWT_SECRET_KEY` / `WS_TOKEN` (`.env.example` içinde nasıl üretileceği yazıyor). Binance anahtarlarını
+**boş bırak**.
+
+### 4. Başlat
+```powershell
+docker compose up -d
+docker compose ps                    # 3 servis "running" olmalı
+docker compose logs -f freqtrade     # canlı log (çıkmak için Ctrl+C; bot çalışmaya devam eder)
+```
+Telegram'da botun "başladı" mesajı gelmeli; `/status` ve `/balance` yazarak dene.
+
+### 5. FreqUI (web arayüzü)
+Tarayıcıda **http://127.0.0.1:8080** → `.env`'deki kullanıcı adı/şifre ile giriş. ComboTrend botunu
+eklemek için: sağ üstteki bot menüsü → **Add new bot** → URL `http://127.0.0.1:8081`, aynı kullanıcı
+adı/şifre. Arayüz sadece bu bilgisayardan açılır, internete kapalıdır.
+
+### 6. Haftalık raporu dene
+```powershell
+docker compose run --rm --no-deps weekly-report --now
+```
+Telegram'a şimdiki haftanın özeti gelmeli. Normalde her **pazartesi 09:00 (İstanbul)** kendiliğinden gelir.
+
+### 7. Bilgisayar ayarları (önemli)
+- Docker Desktop → Settings → General → **Start Docker Desktop when you sign in** işaretli olsun.
+- Windows → Güç ayarları → prize takılıyken **uyku: Hiçbir zaman**. Bilgisayar uyursa bot da durur.
+- Bot yeniden başladığında açık işlemlerini veritabanından (`user_data/tradesv3*.sqlite`) okur, aynı
+  işlem için ikinci emir açmaz.
+
+### Durdurma / yeniden başlatma
+```powershell
+docker compose restart freqtrade     # sadece ana botu yeniden başlat
+docker compose down                  # hepsini durdur (açık sanal işlemler veritabanında kalır)
+docker compose up -d                 # tekrar başlat
+```
+Telegram komutları: `/status`, `/profit`, `/balance`, `/daily`, `/weekly`, `/stopentry` (yeni işlem
+açma), `/stop` (botu durdur), `/start`, `/forceexit <id|all>` (işlemi kapat), `/help`.
+
+Neyi izleyeceğin ve gerçek paraya geçiş kriterleri: **`reports/dryrun_checklist.md`**.
+
 ## Binance API'sine erişilemiyorsa (çevrimdışı mod)
 
 Binance'in canlı API'si bazı ülkelerden/sunuculardan kapalıdır (HTTP 451). Backtest için

@@ -1,0 +1,30 @@
+{
+  "strategy_name": "ComboTrend",
+  "params": {
+    "roi": {
+      "0": 100
+    },
+    "stoploss": {
+      "stoploss": -0.75
+    },
+    "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+    },
+    "max_open_trades": {
+      "max_open_trades": 3
+    },
+    "buy": {
+      "ema_fast": 15,
+      "ema_slow": 77,
+      "st_period": 18,
+      "adx_min": 27,
+      "st_multiplier": 3.9
+    },
+    "sell": {}
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-10-26 21:26:53.950772+00:00"
+}

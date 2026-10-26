@@ -6,6 +6,8 @@
     // true = sanal işlem (gerçek emir yok). Aşama 5'e kadar true kalır.
     "dry_run": true,
     "dry_run_wallet": 100,
+    // Bot (yeniden) başlayınca doğrudan çalışsın; aksi halde /start beklerdi.
+    "initial_state": "running",
 
     // ===== Futures / margin =====
     "trading_mode": "futures",
@@ -115,8 +117,47 @@
     },
     "pairlists": [{"method": "StaticPairList"}],
 
-    // ===== Bildirimler / arayüz (Aşama 4'te ayarlanacak) =====
-    "telegram": {"enabled": false, "token": "", "chat_id": ""},
+    // ===== Telegram =====
+    // Token ve chat id .env'den gelir. Açmak için .env: FREQTRADE__TELEGRAM__ENABLED=true
+    "telegram": {
+        "enabled": false,
+        "token": "",
+        "chat_id": "",
+        "notification_settings": {
+            "status": "on",              // bot başladı / durdu
+            "warning": "on",             // hatalar ve uyarılar
+            "startup": "on",
+            "entry": "on",               // işlem açılıyor
+            "entry_fill": "on",          // işlem açıldı (dolum)
+            "entry_cancel": "on",
+            "exit": "on",                // işlem kapanıyor (stop dahil)
+            "exit_fill": "on",           // işlem kapandı; stop_loss sebebi mesajda yazar
+            "exit_cancel": "on",
+            "protection_trigger": "on",
+            "protection_trigger_global": "on",
+            "liquidation_warning": "on"
+        },
+        "reload": true,
+        "keyboard": [
+            ["/status", "/profit", "/balance"],
+            ["/daily", "/weekly", "/performance"],
+            ["/stopentry", "/stop", "/start", "/help"]
+        ]
+    },
+
+    // ===== FreqUI web arayüzü + REST API =====
+    // Sadece bu bilgisayardan erişilir (docker-compose 127.0.0.1'e bağlar).
+    // Kullanıcı adı/şifre ve gizli anahtarlar (jwt_secret_key, ws_token) .env'den gelir.
+    "api_server": {
+        "enabled": true,
+        "listen_ip_address": "0.0.0.0",
+        "listen_port": 8080,
+        "verbosity": "error",
+        "enable_openapi": false,
+        "CORS_origins": ["http://localhost:8080", "http://127.0.0.1:8080"],
+        "username": "",
+        "password": ""
+    },
 
     "dataformat_ohlcv": "feather",
     "internals": {"process_throttle_secs": 5}

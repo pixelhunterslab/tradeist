@@ -1,0 +1,22 @@
+{
+ "_source": "reports/tournament_results.json, out-of-sample 2025-01-01 -> 2026-10-26 (100 USDT ile başlayan backtest)",
+ "_oos_weeks": 94.7,
+ "EmaAdxTrend": {
+  "variant": "atr3.0_trailing_lev5",
+  "trades_per_week": 0.4,
+  "weekly_return_pct": 0.16,
+  "win_rate_pct": 44.7,
+  "profit_factor": 1.2,
+  "max_dd_pct": 28.9,
+  "avg_trade_hours": 107.0
+ },
+ "ComboTrend": {
+  "variant": "atr2.0_fixed_tp_lev5",
+  "trades_per_week": 0.74,
+  "weekly_return_pct": 0.89,
+  "win_rate_pct": 45.7,
+  "profit_factor": 1.42,
+  "max_dd_pct": 25.5,
+  "avg_trade_hours": 79.0
+ }
+}

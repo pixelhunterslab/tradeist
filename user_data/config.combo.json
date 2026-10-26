@@ -1,0 +1,16 @@
+{
+    // İKİNCİ BOT: ComboTrend, SADECE GÖZLEM AMAÇLI, HER ZAMAN DRY-RUN.
+    // config.json'un üstüne eklenir:
+    //   --config config.json --config config.combo.json
+    // Aşama 3'te kuralları geçemedi; gerçek parayla çalıştırılmayacak.
+    // (docker-compose ayrıca FREQTRADE__DRY_RUN=true zorlar.)
+    "bot_name": "combo-observer",
+    "dry_run": true,
+    "dry_run_wallet": 100,
+    // Aşama 3'te ComboTrend için in-sample'da seçilen varyant: 2.0 x ATR, sabit kâr al (2R).
+    "swing_risk": {
+        "atr_stop_multiplier": 2.0,
+        "trail_atr_multiplier": 2.0,
+        "exit_mode": "fixed_tp"
+    }
+}

@@ -1,14 +1,26 @@
+x-freqtrade: &freqtrade
+  # Sabit sürüm: bilerek güncellenir, asla kazara değil.
+  image: freqtradeorg/freqtrade:2026.9
+  # Bilgisayar/Docker yeniden başlarsa veya bot çökerse otomatik yeniden başlar.
+  # Açık işlemler ve emirler veritabanından (sqlite) okunur; tekrar emir açılmaz.
+  restart: unless-stopped
+  env_file:
+    - path: .env
+      required: false
+  volumes:
+    - ./user_data:/freqtrade/user_data
+  logging:
+    driver: json-file
+    options: {max-size: "10m", max-file: "3"}
+
 services:
+  # ---- ANA BOT: Aşama 3'te seçilen strateji ----
   freqtrade:
-    # Sabit sürüm: bilerek güncellenir, asla kazara değil.
-    image: freqtradeorg/freqtrade:2026.9
+    <<: *freqtrade
     container_name: freqtrade
-    restart: unless-stopped
-    env_file:
-      - path: .env
-        required: false
-    volumes:
-      - ./user_data:/freqtrade/user_data
+    # FreqUI: http://127.0.0.1:8080 (sadece bu bilgisayardan erişilir)
+    ports:
+      - "127.0.0.1:8080:8080"
     # Tek seferlik komutlar (download-data, backtesting, ...) için:
     #   docker compose run --rm freqtrade <komut> ...
     # Bu, aşağıdaki varsayılan "trade" komutunun yerine geçer.
@@ -18,6 +30,49 @@ services:
       --db-url sqlite:////freqtrade/user_data/tradesv3.sqlite
       --config /freqtrade/user_data/config.json
       --strategy ${STRATEGY:-EmaAdxTrend}
+
+  # ---- GÖZLEM BOTU: ComboTrend, HER ZAMAN dry-run (gerçek emir yok) ----
+  freqtrade-combo:
+    <<: *freqtrade
+    container_name: freqtrade-combo
+    environment:
+      FREQTRADE__DRY_RUN: "true"                       # .env ne derse desin sanal
+      FREQTRADE__EXCHANGE__KEY: ""                     # API anahtarına hiç erişmez
+      FREQTRADE__EXCHANGE__SECRET: ""
+      # Telegram için AYRI bir bot token'ı gerekir (aynı token iki botta çalışmaz).
+      FREQTRADE__TELEGRAM__ENABLED: "${COMBO_TELEGRAM_ENABLED:-false}"
+      FREQTRADE__TELEGRAM__TOKEN: "${COMBO_TELEGRAM_TOKEN:-}"
+    ports:
+      - "127.0.0.1:8081:8080"
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/freqtrade-combo.log
+      --db-url sqlite:////freqtrade/user_data/tradesv3.combo.sqlite
+      --config /freqtrade/user_data/config.json
+      --config /freqtrade/user_data/config.combo.json
+      --strategy ComboTrend
+
+  # ---- HAFTALIK RAPOR: her pazartesi sabahı Telegram'a özet gönderir ----
+  weekly-report:
+    image: freqtradeorg/freqtrade:2026.9
+    container_name: weekly-report
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      REPORT_BOTS: "EmaAdxTrend=http://freqtrade:8080,ComboTrend (gözlem)=http://freqtrade-combo:8080"
+      REPORT_TZ: "${REPORT_TZ:-Europe/Istanbul}"
+      REPORT_WEEKDAY: "${REPORT_WEEKDAY:-0}"   # 0 = pazartesi
+      REPORT_HOUR: "${REPORT_HOUR:-9}"
+    volumes:
+      - ./user_data:/freqtrade/user_data
+      - ./reports:/freqtrade/reports:ro
+    entrypoint: ["python", "/freqtrade/user_data/tools/weekly_report.py"]
+    depends_on: [freqtrade, freqtrade-combo]
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "2"}
 
   # Sadece analiz/backtest raporları için (bot bunu kullanmaz). Çalıştırma:
   #   docker compose --profile research run --rm research <script.py> ...
