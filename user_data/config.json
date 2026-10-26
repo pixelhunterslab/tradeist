@@ -43,6 +43,21 @@
         "trail_atr_multiplier": 2.5
     },
 
+    // ===== Korumalar (Freqtrade protections; strateji bu değerleri okur) =====
+    // Botun canlıda da backtestte de aynı korumalarla çalışması için burada.
+    "swing_protections": {
+        // Bir coinde işlem kapanınca o coinde 4 saat yeni işlem yok.
+        "cooldown_minutes": 240,
+        // 24 saatte 3 stop olursa 12 saat hiç yeni işlem açma.
+        "stoploss_guard": {"lookback_minutes": 1440, "trade_limit": 3, "stop_minutes": 720},
+        // Son 30 günde hesap %25'ten fazla düşerse 1 hafta yeni işlem açma.
+        "max_drawdown": {"lookback_minutes": 43200, "max_drawdown_pct": 25, "trade_limit": 1,
+                         "stop_minutes": 10080},
+        // Son 14 günde 3+ işlemde zararda olan coini 2 gün kilitle.
+        "low_profit_pairs": {"lookback_minutes": 20160, "trade_limit": 3, "required_profit": 0.0,
+                             "stop_minutes": 2880}
+    },
+
     // ===== Emirler =====
     "order_types": {
         "entry": "market",

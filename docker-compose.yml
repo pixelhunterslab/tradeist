@@ -18,3 +18,16 @@ services:
       --db-url sqlite:////freqtrade/user_data/tradesv3.sqlite
       --config /freqtrade/user_data/config.json
       --strategy ${STRATEGY:-NoStrategyChosenYet}
+
+  # Sadece analiz/backtest raporları için (bot bunu kullanmaz). Çalıştırma:
+  #   docker compose --profile research run --rm research <script.py> ...
+  research:
+    build:
+      context: docker
+      dockerfile: research.Dockerfile
+    image: tradeist-research:2026.9
+    profiles: ["research"]
+    volumes:
+      - ./user_data:/freqtrade/user_data
+      - ./reports:/freqtrade/reports
+    entrypoint: ["python"]

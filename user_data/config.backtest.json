@@ -1,0 +1,12 @@
+{
+    // Backtest/hyperopt için config.json'un ÜSTÜNE eklenen ayarlar:
+    //   --config user_data/config.json --config user_data/config.backtest.json
+    //
+    // Maliyet varsayımı (her alış ve her satış için ayrı ayrı):
+    //   %0.05 Binance taker ücreti (market emir, BNB indirimi yok)
+    // + %0.05 kayma (slippage) payı: market/stop emirleri genelde biraz kötü fiyattan dolar
+    // = 0.001 (%0.1). Bir işlem giriş+çıkış toplam ~%0.2 maliyet.
+    "fee": 0.001,
+    // Funding ücretleri indirilen funding oranı + mark fiyatı verisinden hesaplanır.
+    "dry_run_wallet": 100
+}

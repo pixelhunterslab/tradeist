@@ -52,6 +52,20 @@ DEFAULT_RISK = {
     "trail_activation_rr": 1.0,
     "trail_atr_multiplier": 2.5,
 }
+# Freqtrade korumaları (config.json -> "swing_protections" ile değiştirilebilir).
+DEFAULT_PROTECTIONS = {
+    # Bir coinde işlem kapandıktan sonra o coinde bu kadar dakika yeni işlem yok
+    # (aynı sinyalle art arda stop olmayı önler).
+    "cooldown_minutes": 240,
+    # Son lookback içinde trade_limit kadar stop olduysa TÜM işlemlere ara ver.
+    "stoploss_guard": {"lookback_minutes": 1440, "trade_limit": 3, "stop_minutes": 720},
+    # Hesap (equity) düşüşü max_drawdown_pct'yi geçerse işlemleri durdur.
+    "max_drawdown": {"lookback_minutes": 43200, "max_drawdown_pct": 25, "trade_limit": 1,
+                     "stop_minutes": 10080},
+    # Son lookback içinde zararda olan coini bir süre kilitle.
+    "low_profit_pairs": {"lookback_minutes": 20160, "trade_limit": 3, "required_profit": 0.0,
+                         "stop_minutes": 2880},
+}
 # Binance'in küçük pozisyonlardaki bakım marjini ~%0.4-0.5; ihtiyatlı olmak için %1.
 MAINTENANCE_MARGIN_SAFETY = 0.01
 
@@ -78,6 +92,24 @@ class SwingRiskMixin:
             cfg["leverage"] = min(float(cfg["leverage"]), float(cfg["max_leverage"]))
             self._risk = cfg
         return self._risk
+
+    @property
+    def protections(self) -> list:
+        p = {**DEFAULT_PROTECTIONS, **self.config.get("swing_protections", {})}
+        sg, md, lp = p["stoploss_guard"], p["max_drawdown"], p["low_profit_pairs"]
+        return [
+            {"method": "CooldownPeriod", "stop_duration": p["cooldown_minutes"]},
+            {"method": "StoplossGuard", "lookback_period": sg["lookback_minutes"],
+             "trade_limit": sg["trade_limit"], "stop_duration": sg["stop_minutes"],
+             "only_per_pair": False},
+            {"method": "MaxDrawdown", "calculation_mode": "equity",
+             "lookback_period": md["lookback_minutes"], "trade_limit": md["trade_limit"],
+             "max_allowed_drawdown": md["max_drawdown_pct"] / 100,
+             "stop_duration": md["stop_minutes"]},
+            {"method": "LowProfitPairs", "lookback_period": lp["lookback_minutes"],
+             "trade_limit": lp["trade_limit"], "required_profit": lp["required_profit"],
+             "stop_duration": lp["stop_minutes"]},
+        ]
 
     # ------------------------------------------------------------- göstergeler
     def signal_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
