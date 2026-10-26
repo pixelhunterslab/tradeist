@@ -1,0 +1,39 @@
+# ---- Secrets: NEVER commit ----
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# ---- Freqtrade runtime state ----
+user_data/*.sqlite
+user_data/*.sqlite-*
+user_data/*.sqlite3
+user_data/logs/*
+!user_data/logs/.gitkeep
+user_data/backtest_results/
+user_data/hyperopt_results/
+user_data/hyperopts/
+user_data/plot/
+user_data/notebooks/
+user_data/freqaimodels/
+user_data/models/
+user_data/*.lock
+user_data/.last_result.json
+user_data/strategies/*.json
+
+# ---- Market data (large, re-downloadable) ----
+user_data/data/*
+!user_data/data/.gitkeep
+
+# ---- Python / OS / editor ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/

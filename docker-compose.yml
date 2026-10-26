@@ -1,0 +1,20 @@
+services:
+  freqtrade:
+    # Pinned version: upgrade on purpose, never by accident.
+    image: freqtradeorg/freqtrade:2026.9
+    container_name: freqtrade
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./user_data:/freqtrade/user_data
+    # One-off commands (download-data, backtesting, ...) use
+    #   docker compose run --rm freqtrade <command> ...
+    # which replaces this default "trade" command.
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/freqtrade.log
+      --db-url sqlite:////freqtrade/user_data/tradesv3.sqlite
+      --config /freqtrade/user_data/config.json
+      --strategy ${STRATEGY:-NoStrategyChosenYet}
