@@ -14,6 +14,7 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
+import matplotlib.dates as mdates  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
@@ -86,6 +87,9 @@ def plot_equity(results, colors) -> str:
         ax.axhline(100, color=INK2, linewidth=0.8, linestyle="--")
         ax.set_title(title, fontsize=10, color=INK, loc="left")
         ax.set_ylabel("Bakiye (USDT, 100 ile başlar)", fontsize=8, color=INK2)
+        locator = mdates.AutoDateLocator(maxticks=6)
+        ax.xaxis.set_major_locator(locator)
+        ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
         style(ax)
     axes[0].legend(frameon=False, fontsize=8, loc="upper left")
     fig.tight_layout()
@@ -235,7 +239,9 @@ def main():
     IMG.mkdir(parents=True, exist_ok=True)
     results = load_results()
     colors = {r["strategy"]: COLORS[i % len(COLORS)] for i, r in enumerate(results)}
-    ranked = sorted(results, key=lambda r: r["robustness"]["score"], reverse=True)
+    # Kuralları geçenler her zaman önce; sonra puana göre.
+    ranked = sorted(results, key=lambda r: (r["robustness"]["passed"], r["robustness"]["score"]),
+                    reverse=True)
     md = ["# Strateji Turnuvası (Aşama 3)\n",
           f"_Otomatik üretildi: `user_data/tools/tournament/report.py`. Veri: Binance USDⓈ-M, "
           f"ETH, SOL, XRP, BNB, DOGE, ADA._\n"]
@@ -245,7 +251,8 @@ def main():
         md.append(concl.read_text())
 
     md.append("## 1. Karşılaştırma tablosu\n")
-    md.append("Sıralama **sağlamlık puanına** göre (toplam kâra göre değil). In-sample ve "
+    md.append("Sıralama: önce eleme kurallarını geçenler, sonra **sağlamlık puanı** (toplam kâra "
+              "göre değil). In-sample ve "
               "out-of-sample ayrı koşulardır, ikisi de 100 USDT ile başlar.\n")
     rows = []
     for r in ranked:

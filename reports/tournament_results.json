@@ -1,0 +1,1162 @@
+[
+ {
+  "strategy": "SupertrendTrend",
+  "chosen_variant": "atr3.0_fixed_tp_lev5",
+  "risk": {
+   "atr_stop_multiplier": 3.0,
+   "trail_atr_multiplier": 3.0,
+   "exit_mode": "fixed_tp",
+   "leverage": 5
+  },
+  "params_is": {
+   "roi": {
+    "0": 100
+   },
+   "stoploss": {
+    "stoploss": -0.75
+   },
+   "trailing": {
+    "trailing_stop": false,
+    "trailing_stop_positive": null,
+    "trailing_stop_positive_offset": 0.0,
+    "trailing_only_offset_is_reached": false
+   },
+   "max_open_trades": {
+    "max_open_trades": 3
+   },
+   "buy": {
+    "st_multiplier": 4.0,
+    "st_period": 18
+   },
+   "sell": {}
+  },
+  "is": {
+   "trades": 391,
+   "return_pct": 394.4646921900001,
+   "cagr_pct": 39.14965182857839,
+   "max_dd_pct": 69.91325797643746,
+   "calmar": 0.5599746451777833,
+   "profit_factor": 1.1888818213409091,
+   "win_rate_pct": 37.34015345268542,
+   "avg_hours": 169.61253196930946,
+   "funding_usdt": 14.179854922615924,
+   "end_equity": 494.46469219000016
+  },
+  "oos": {
+   "trades": 161,
+   "return_pct": 50.88872447999997,
+   "cagr_pct": 25.43620706611389,
+   "max_dd_pct": 59.814472406236206,
+   "calmar": 0.4252517165638651,
+   "profit_factor": 1.05259911759452,
+   "win_rate_pct": 41.61490683229814,
+   "avg_hours": 161.8555900621118,
+   "funding_usdt": -1.3687870397526736,
+   "end_equity": 150.88872447999998
+  },
+  "robustness": {
+   "score": 0.3384318464407199,
+   "passed": false,
+   "reject_reasons": [
+    "out-of-sample k\u00e2r fakt\u00f6r\u00fc d\u00fc\u015f\u00fck (1.05 < 1.1)",
+    "en b\u00fcy\u00fck d\u00fc\u015f\u00fc\u015f \u00e7ok fazla (70% > 40%)"
+   ],
+   "wf_profitable": 5
+  },
+  "walk_forward": [
+   {
+    "window": "20220101-20220701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "st_multiplier": 3.5,
+      "st_period": 10
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 52,
+    "return_pct": 64.38759267999995,
+    "cagr_pct": 172.65544351579635,
+    "max_dd_pct": 26.763727433828834,
+    "calmar": 6.451098560268672,
+    "profit_factor": 1.3229745038200618,
+    "win_rate_pct": 44.230769230769226,
+    "avg_hours": 127.75,
+    "funding_usdt": 0.6340236112940251,
+    "end_equity": 164.38759267999995
+   },
+   {
+    "window": "20220701-20230101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "st_multiplier": 3.7,
+      "st_period": 10
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 39,
+    "return_pct": 44.84035639000001,
+    "cagr_pct": 108.6289487626495,
+    "max_dd_pct": 39.024523911878376,
+    "calmar": 2.78360727751466,
+    "profit_factor": 1.5128663999771528,
+    "win_rate_pct": 41.02564102564102,
+    "avg_hours": 162.46153846153848,
+    "funding_usdt": 1.203290315534124,
+    "end_equity": 144.84035639
+   },
+   {
+    "window": "20230101-20230701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "st_multiplier": 4.0,
+      "st_period": 14
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 48,
+    "return_pct": 9.922856040000006,
+    "cagr_pct": 21.03578064967133,
+    "max_dd_pct": 30.287574558970086,
+    "calmar": 0.6945350017616809,
+    "profit_factor": 1.0578390990303552,
+    "win_rate_pct": 37.5,
+    "avg_hours": 145.14583333333334,
+    "funding_usdt": -1.698062204827184,
+    "end_equity": 109.92285604
+   },
+   {
+    "window": "20230701-20240101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "st_multiplier": 4.0,
+      "st_period": 14
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 34,
+    "return_pct": 9.833231070000004,
+    "cagr_pct": 20.464401449009962,
+    "max_dd_pct": 19.697706923594005,
+    "calmar": 1.0389230344623315,
+    "profit_factor": 1.1143442886986412,
+    "win_rate_pct": 29.411764705882355,
+    "avg_hours": 230.74264705882354,
+    "funding_usdt": 4.585560921155864,
+    "end_equity": 109.83323107000001
+   },
+   {
+    "window": "20240101-20240701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "st_multiplier": 3.7,
+      "st_period": 10
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 46,
+    "return_pct": -31.277199980000002,
+    "cagr_pct": -52.89327856103744,
+    "max_dd_pct": 45.05053499000001,
+    "calmar": -1.1740876900302804,
+    "profit_factor": 0.6788971114358743,
+    "win_rate_pct": 26.08695652173913,
+    "avg_hours": 183.13586956521738,
+    "funding_usdt": 3.981952642522138,
+    "end_equity": 68.72280002
+   },
+   {
+    "window": "20240701-20250101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "st_multiplier": 3.7,
+      "st_period": 10
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 54,
+    "return_pct": 252.33428716999998,
+    "cagr_pct": 1118.246630344452,
+    "max_dd_pct": 23.618278302664553,
+    "calmar": 47.34666159888099,
+    "profit_factor": 1.85577826145553,
+    "win_rate_pct": 50.0,
+    "avg_hours": 137.62037037037035,
+    "funding_usdt": 1.0800367242376612,
+    "end_equity": 352.33428717
+   }
+  ]
+ },
+ {
+  "strategy": "EmaAdxTrend",
+  "chosen_variant": "atr3.0_trailing_lev5",
+  "risk": {
+   "atr_stop_multiplier": 3.0,
+   "trail_atr_multiplier": 3.0,
+   "exit_mode": "trailing",
+   "leverage": 5
+  },
+  "params_is": {
+   "roi": {
+    "0": 100
+   },
+   "stoploss": {
+    "stoploss": -0.75
+   },
+   "trailing": {
+    "trailing_stop": false,
+    "trailing_stop_positive": null,
+    "trailing_stop_positive_offset": 0.0,
+    "trailing_only_offset_is_reached": false
+   },
+   "max_open_trades": {
+    "max_open_trades": 3
+   },
+   "buy": {
+    "adx_min": 29,
+    "ema_fast": 15,
+    "ema_slow": 77
+   },
+   "sell": {}
+  },
+  "is": {
+   "trades": 129,
+   "return_pct": 115.78366414000003,
+   "cagr_pct": 17.23134165644837,
+   "max_dd_pct": 26.71149109091995,
+   "calmar": 0.6450909684448815,
+   "profit_factor": 1.4106151746201105,
+   "win_rate_pct": 55.03875968992248,
+   "avg_hours": 130.44573643410854,
+   "funding_usdt": 8.364461401251534,
+   "end_equity": 215.78366414
+  },
+  "oos": {
+   "trades": 38,
+   "return_pct": 16.366608670000016,
+   "cagr_pct": 8.708919938833514,
+   "max_dd_pct": 28.91338030341978,
+   "calmar": 0.3012072558601338,
+   "profit_factor": 1.1978103914700395,
+   "win_rate_pct": 44.73684210526316,
+   "avg_hours": 107.32236842105264,
+   "funding_usdt": -0.10583387831273017,
+   "end_equity": 116.36660867
+  },
+  "robustness": {
+   "score": 0.3354630637127277,
+   "passed": true,
+   "reject_reasons": [],
+   "wf_profitable": 4
+  },
+  "walk_forward": [
+   {
+    "window": "20220101-20220701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "adx_min": 29,
+      "ema_fast": 15,
+      "ema_slow": 77
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 10,
+    "return_pct": -10.220348239999987,
+    "cagr_pct": -19.5520271669236,
+    "max_dd_pct": 16.767680087460768,
+    "calmar": -1.1660544013804885,
+    "profit_factor": 0.5932249332840278,
+    "win_rate_pct": 50.0,
+    "avg_hours": 97.85,
+    "funding_usdt": -0.12163106054737662,
+    "end_equity": 89.77965176000001
+   },
+   {
+    "window": "20220701-20230101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "adx_min": 24,
+      "ema_fast": 10,
+      "ema_slow": 43
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 31,
+    "return_pct": 27.620582070000022,
+    "cagr_pct": 62.277529683597876,
+    "max_dd_pct": 19.238652864274318,
+    "calmar": 3.2371044959829613,
+    "profit_factor": 1.5075036293866164,
+    "win_rate_pct": 54.83870967741935,
+    "avg_hours": 90.18548387096774,
+    "funding_usdt": -0.6522053714011036,
+    "end_equity": 127.62058207000001
+   },
+   {
+    "window": "20230101-20230701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "adx_min": 29,
+      "ema_fast": 15,
+      "ema_slow": 77
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 15,
+    "return_pct": 13.026362999999996,
+    "cagr_pct": 28.03077989046212,
+    "max_dd_pct": 16.59072554015569,
+    "calmar": 1.689545151151905,
+    "profit_factor": 1.4860843641349541,
+    "win_rate_pct": 53.333333333333336,
+    "avg_hours": 161.98333333333332,
+    "funding_usdt": 2.2917759274016087,
+    "end_equity": 113.026363
+   },
+   {
+    "window": "20230701-20240101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "adx_min": 28,
+      "ema_fast": 14,
+      "ema_slow": 51
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 18,
+    "return_pct": 8.71356376000001,
+    "cagr_pct": 18.038907504571622,
+    "max_dd_pct": 8.253873443963556,
+    "calmar": 2.18550812864284,
+    "profit_factor": 1.4506191753576358,
+    "win_rate_pct": 61.111111111111114,
+    "avg_hours": 119.30555555555556,
+    "funding_usdt": 0.8209979577583295,
+    "end_equity": 108.71356376
+   },
+   {
+    "window": "20240101-20240701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "adx_min": 24,
+      "ema_fast": 13,
+      "ema_slow": 49
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 33,
+    "return_pct": -35.14167874000002,
+    "cagr_pct": -58.05888588685032,
+    "max_dd_pct": 38.7178554,
+    "calmar": -1.4995377529833513,
+    "profit_factor": 0.3629455012307919,
+    "win_rate_pct": 39.39393939393939,
+    "avg_hours": 98.84848484848486,
+    "funding_usdt": 0.8751051899964147,
+    "end_equity": 64.85832125999998
+   },
+   {
+    "window": "20240701-20250101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "adx_min": 28,
+      "ema_fast": 14,
+      "ema_slow": 51
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 16,
+    "return_pct": 6.188980669999999,
+    "cagr_pct": 12.659839830447627,
+    "max_dd_pct": 18.009030315896048,
+    "calmar": 0.7029717651856666,
+    "profit_factor": 1.1858525095774881,
+    "win_rate_pct": 50.0,
+    "avg_hours": 109.609375,
+    "funding_usdt": -0.06332303113996263,
+    "end_equity": 106.18898067
+   }
+  ]
+ },
+ {
+  "strategy": "DonchianBreakout",
+  "chosen_variant": "atr1.5_fixed_tp_lev5",
+  "risk": {
+   "atr_stop_multiplier": 1.5,
+   "trail_atr_multiplier": 1.5,
+   "exit_mode": "fixed_tp",
+   "leverage": 5
+  },
+  "params_is": {
+   "roi": {
+    "0": 100
+   },
+   "stoploss": {
+    "stoploss": -0.75
+   },
+   "trailing": {
+    "trailing_stop": false,
+    "trailing_stop_positive": null,
+    "trailing_stop_positive_offset": 0.0,
+    "trailing_only_offset_is_reached": false
+   },
+   "max_open_trades": {
+    "max_open_trades": 3
+   },
+   "buy": {
+    "entry_period": 16,
+    "vol_mult": 1.4
+   },
+   "sell": {
+    "exit_period": 19
+   }
+  },
+  "is": {
+   "trades": 989,
+   "return_pct": 1454.7243708699998,
+   "cagr_pct": 76.32839111127385,
+   "max_dd_pct": 72.34993053882832,
+   "calmar": 1.0549891415626227,
+   "profit_factor": 1.1197170294879788,
+   "win_rate_pct": 37.71486349848331,
+   "avg_hours": 40.52906976744186,
+   "funding_usdt": -100.30524496740989,
+   "end_equity": 1554.7243708699998
+  },
+  "oos": {
+   "trades": 369,
+   "return_pct": 13.579978130000026,
+   "cagr_pct": 7.266973235549901,
+   "max_dd_pct": 75.47350501842247,
+   "calmar": 0.09628509016211836,
+   "profit_factor": 1.0100455517530198,
+   "win_rate_pct": 36.58536585365854,
+   "avg_hours": 39.173441734417345,
+   "funding_usdt": -8.648160862264504,
+   "end_equity": 113.57997813000001
+  },
+  "robustness": {
+   "score": 0.13073287691274788,
+   "passed": false,
+   "reject_reasons": [
+    "out-of-sample k\u00e2r fakt\u00f6r\u00fc d\u00fc\u015f\u00fck (1.01 < 1.1)",
+    "en b\u00fcy\u00fck d\u00fc\u015f\u00fc\u015f \u00e7ok fazla (75% > 40%)",
+    "walk-forward tutars\u0131z (3/6 pencere k\u00e2rl\u0131 < 4)"
+   ],
+   "wf_profitable": 3
+  },
+  "walk_forward": [
+   {
+    "window": "20220101-20220701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "entry_period": 33,
+      "vol_mult": 1.8
+     },
+     "sell": {
+      "exit_period": 10
+     }
+    },
+    "defaults_used": false,
+    "trades": 91,
+    "return_pct": 84.63652886,
+    "cagr_pct": 244.68088558007562,
+    "max_dd_pct": 56.85061426299816,
+    "calmar": 4.30392685729218,
+    "profit_factor": 1.1776561060009865,
+    "win_rate_pct": 40.65934065934066,
+    "avg_hours": 29.917582417582416,
+    "funding_usdt": -3.7029642402522236,
+    "end_equity": 184.63652886
+   },
+   {
+    "window": "20220701-20230101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "entry_period": 30,
+      "vol_mult": 2.0
+     },
+     "sell": {
+      "exit_period": 16
+     }
+    },
+    "defaults_used": false,
+    "trades": 72,
+    "return_pct": 0.5958416999999994,
+    "cagr_pct": 1.186249132426731,
+    "max_dd_pct": 47.97560998978623,
+    "calmar": 0.024726087540716576,
+    "profit_factor": 1.0033044575011378,
+    "win_rate_pct": 38.88888888888889,
+    "avg_hours": 34.545138888888886,
+    "funding_usdt": -2.574689109169154,
+    "end_equity": 100.59584170000001
+   },
+   {
+    "window": "20230101-20230701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "entry_period": 53,
+      "vol_mult": 2.0
+     },
+     "sell": {
+      "exit_period": 17
+     }
+    },
+    "defaults_used": false,
+    "trades": 77,
+    "return_pct": -19.822518860000006,
+    "cagr_pct": -35.97022131009725,
+    "max_dd_pct": 50.784549846433634,
+    "calmar": -0.7082906399459455,
+    "profit_factor": 0.9105976863203498,
+    "win_rate_pct": 33.76623376623377,
+    "avg_hours": 42.350649350649356,
+    "funding_usdt": 1.9855261825886947,
+    "end_equity": 80.17748114
+   },
+   {
+    "window": "20230701-20240101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "entry_period": 41,
+      "vol_mult": 1.9
+     },
+     "sell": {
+      "exit_period": 12
+     }
+    },
+    "defaults_used": false,
+    "trades": 85,
+    "return_pct": 16.002505469999996,
+    "cagr_pct": 34.26760180536235,
+    "max_dd_pct": 39.142617910861254,
+    "calmar": 0.8754550317354682,
+    "profit_factor": 1.0669106799925854,
+    "win_rate_pct": 35.294117647058826,
+    "avg_hours": 34.705882352941174,
+    "funding_usdt": -2.866883389570129,
+    "end_equity": 116.00250547
+   },
+   {
+    "window": "20240101-20240701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "entry_period": 41,
+      "vol_mult": 1.9
+     },
+     "sell": {
+      "exit_period": 12
+     }
+    },
+    "defaults_used": false,
+    "trades": 70,
+    "return_pct": -41.58900131999999,
+    "cagr_pct": -66.00731125826474,
+    "max_dd_pct": 43.62331771999999,
+    "calmar": -1.5131199254934788,
+    "profit_factor": 0.7581610603338648,
+    "win_rate_pct": 31.428571428571427,
+    "avg_hours": 39.575,
+    "funding_usdt": -0.042244597047757404,
+    "end_equity": 58.41099868000001
+   },
+   {
+    "window": "20240701-20250101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "entry_period": 41,
+      "vol_mult": 1.9
+     },
+     "sell": {
+      "exit_period": 12
+     }
+    },
+    "defaults_used": false,
+    "trades": 70,
+    "return_pct": -45.032573920000004,
+    "cagr_pct": -69.51437547381134,
+    "max_dd_pct": 60.648369237899736,
+    "calmar": -1.1461870508196808,
+    "profit_factor": 0.7526299411905149,
+    "win_rate_pct": 28.57142857142857,
+    "avg_hours": 29.21785714285714,
+    "funding_usdt": -0.892195894181344,
+    "end_equity": 54.967426079999996
+   }
+  ]
+ },
+ {
+  "strategy": "RsiBbMeanReversion",
+  "chosen_variant": "atr1.5_trailing_lev5",
+  "risk": {
+   "atr_stop_multiplier": 1.5,
+   "trail_atr_multiplier": 1.5,
+   "exit_mode": "trailing",
+   "leverage": 5
+  },
+  "params_is": {
+   "roi": {
+    "0": 100
+   },
+   "stoploss": {
+    "stoploss": -0.75
+   },
+   "trailing": {
+    "trailing_stop": false,
+    "trailing_stop_positive": null,
+    "trailing_stop_positive_offset": 0.0,
+    "trailing_only_offset_is_reached": false
+   },
+   "max_open_trades": {
+    "max_open_trades": 3
+   },
+   "buy": {
+    "trend_ema": 50,
+    "bb_std": 2.8,
+    "rsi_low": 23
+   },
+   "sell": {}
+  },
+  "is": {
+   "trades": 111,
+   "return_pct": -57.090364449999996,
+   "cagr_pct": -16.044959728655673,
+   "max_dd_pct": 58.56740850999999,
+   "calmar": -0.27395713993246096,
+   "profit_factor": 0.47597466270122274,
+   "win_rate_pct": 39.63963963963964,
+   "avg_hours": 6.1058558558558556,
+   "funding_usdt": 0.3847430286128923,
+   "end_equity": 42.909635550000004
+  },
+  "oos": {
+   "trades": 42,
+   "return_pct": -35.10636263000001,
+   "cagr_pct": -21.197279322279062,
+   "max_dd_pct": 35.10636263000001,
+   "calmar": -0.6038016397678581,
+   "profit_factor": 0.22003308768713647,
+   "win_rate_pct": 33.33333333333333,
+   "avg_hours": 6.952380952380952,
+   "funding_usdt": 0.1352511154822813,
+   "end_equity": 64.89363737
+  },
+  "robustness": {
+   "score": 0.03333333333333333,
+   "passed": false,
+   "reject_reasons": [
+    "out-of-sample zararda (-35.1%)",
+    "out-of-sample k\u00e2r fakt\u00f6r\u00fc d\u00fc\u015f\u00fck (0.22 < 1.1)",
+    "en b\u00fcy\u00fck d\u00fc\u015f\u00fc\u015f \u00e7ok fazla (59% > 40%)",
+    "walk-forward tutars\u0131z (1/6 pencere k\u00e2rl\u0131 < 4)"
+   ],
+   "wf_profitable": 1
+  },
+  "walk_forward": [
+   {
+    "window": "20220101-20220701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "trend_ema": 50,
+      "bb_std": 2.1,
+      "rsi_low": 24
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 15,
+    "return_pct": 9.350544309999997,
+    "cagr_pct": 19.767493176637153,
+    "max_dd_pct": 2.945596014104568,
+    "calmar": 6.710863635740719,
+    "profit_factor": 1.948465817328149,
+    "win_rate_pct": 60.0,
+    "avg_hours": 7.416666666666667,
+    "funding_usdt": 0.05563871362112133,
+    "end_equity": 109.35054431
+   },
+   {
+    "window": "20220701-20230101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "trend_ema": 50,
+      "bb_std": 2.1,
+      "rsi_low": 24
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 16,
+    "return_pct": -4.335970220000007,
+    "cagr_pct": -8.423283828376393,
+    "max_dd_pct": 8.73265931991478,
+    "calmar": -0.9645725912113783,
+    "profit_factor": 0.6837420216675856,
+    "win_rate_pct": 62.5,
+    "avg_hours": 8.546875,
+    "funding_usdt": 1.1580065326945554,
+    "end_equity": 95.66402977999999
+   },
+   {
+    "window": "20230101-20230701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "trend_ema": 50,
+      "bb_std": 2.1,
+      "rsi_low": 24
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 28,
+    "return_pct": -22.712030520000003,
+    "cagr_pct": -40.54138966127869,
+    "max_dd_pct": 22.712030520000003,
+    "calmar": -1.7850182803152859,
+    "profit_factor": 0.32838073439861115,
+    "win_rate_pct": 28.57142857142857,
+    "avg_hours": 6.357142857142858,
+    "funding_usdt": 0.08586788988288191,
+    "end_equity": 77.28796948
+   },
+   {
+    "window": "20230701-20240101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "trend_ema": 50,
+      "bb_std": 1.7,
+      "rsi_low": 22
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 11,
+    "return_pct": -15.692016100000005,
+    "cagr_pct": -28.74007705460483,
+    "max_dd_pct": 15.692016100000005,
+    "calmar": -1.8315095314364875,
+    "profit_factor": 0.03683175822536809,
+    "win_rate_pct": 18.181818181818183,
+    "avg_hours": 4.704545454545454,
+    "funding_usdt": -0.11885423480251303,
+    "end_equity": 84.3079839
+   },
+   {
+    "window": "20240101-20240701",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "trend_ema": 50,
+      "bb_std": 1.7,
+      "rsi_low": 22
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 8,
+    "return_pct": -0.2372400299999966,
+    "cagr_pct": -0.47554081893905753,
+    "max_dd_pct": 4.463915053846524,
+    "calmar": -0.1065299884076619,
+    "profit_factor": 0.9475865674207415,
+    "win_rate_pct": 50.0,
+    "avg_hours": 10.75,
+    "funding_usdt": -0.10396656774606,
+    "end_equity": 99.76275997
+   },
+   {
+    "window": "20240701-20250101",
+    "params": {
+     "roi": {
+      "0": 100
+     },
+     "stoploss": {
+      "stoploss": -0.75
+     },
+     "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+     },
+     "max_open_trades": {
+      "max_open_trades": 3
+     },
+     "buy": {
+      "trend_ema": 50,
+      "bb_std": 1.7,
+      "rsi_low": 22
+     },
+     "sell": {}
+    },
+    "defaults_used": false,
+    "trades": 7,
+    "return_pct": -4.451088870000008,
+    "cagr_pct": -8.641907409991568,
+    "max_dd_pct": 6.352123759999994,
+    "calmar": -1.3604752892899514,
+    "profit_factor": 0.5182864587346462,
+    "win_rate_pct": 57.14285714285714,
+    "avg_hours": 6.571428571428572,
+    "funding_usdt": 0.012546657546606183,
+    "end_equity": 95.54891113
+   }
+  ]
+ }
+]
