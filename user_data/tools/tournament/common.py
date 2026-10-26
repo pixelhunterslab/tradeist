@@ -64,6 +64,7 @@ def _prepare(run: str, strategy: str, risk: dict | None, params: Path | None) ->
     d = OUT / "runs" / run
     sdir = d / "strategies"
     sdir.mkdir(parents=True, exist_ok=True)
+    (d / "userdir").mkdir(exist_ok=True)
     (d / "bt").mkdir(exist_ok=True)
     for f in ("swing_risk.py", f"{strategy}.py"):
         shutil.copy(STRAT_SRC / f, sdir / f)
@@ -101,15 +102,24 @@ def hyperopt(run: str, strategy: str, timerange: str, risk: dict | None = None,
     if not (d / "done").exists():
         d = _prepare(run, strategy, risk, None)
         extra = ["--analyze-per-epoch"] if strategy in ANALYZE_PER_EPOCH else []
-        _run(d, ["hyperopt", "--strategy", strategy, "--strategy-path", str(d / "strategies"),
+        # Freqtrade aynı user_data'da paralel hyperopt'a izin vermez (kilit dosyası);
+        # her koşu kendi userdir'ini kullanır, veri ortak klasörden okunur.
+        _run(d, ["hyperopt", "--userdir", str(d / "userdir"), "--datadir", str(UD / "data" / "binance"),
+                 "--strategy", strategy, "--strategy-path", str(d / "strategies"),
                  "--timerange", timerange, "--spaces", "buy", "sell", "--ignore-missing-spaces",
                  "--hyperopt-loss", HYPEROPT_LOSS, "-e", str(HYPEROPT_EPOCHS), "-j", "1",
                  "--random-state", str(RANDOM_STATE), "--min-trades", str(min_trades),
                  "--enable-protections", *extra])
     params = d / "strategies" / f"{strategy}.json"
+    log = (d / "log.txt").read_text()
+    if "Quitting now" in log:
+        (d / "done").unlink()
+        raise RuntimeError(f"Hyperopt çalışmadan çıktı, bkz. {d / 'log.txt'}")
     if not params.exists():
-        # Hiçbir deneme min_trades şartını sağlamadıysa: varsayılan parametreler.
-        params.write_text(json.dumps({"strategy_name": strategy, "params": {}}))
+        # Hiçbir deneme min_trades şartını sağlamadı: varsayılan parametreler kullanılır
+        # ("defaults_used" ile işaretlenir, raporda görünür).
+        params.write_text(json.dumps({"strategy_name": strategy, "params": {},
+                                      "defaults_used": True}))
     return params
 
 

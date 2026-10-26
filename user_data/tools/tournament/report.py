@@ -325,6 +325,9 @@ def main():
     md.append("## 7. Ayrıntılı inceleme: zayıf yanlar\n")
     for r in ranked[:2]:
         md.append(f"### {r['strategy']} ({r['chosen_variant'].replace('_lev5', '')})\n")
+        if r.get("defaults_used"):
+            md.append("⚠️ In-sample hyperopt'ta hiçbir deneme minimum işlem sayısını sağlamadı; "
+                      "varsayılan parametreler kullanıldı.\n")
         md.append(f"Parametreler (in-sample hyperopt): `{json.dumps(r['params_is'].get('buy', {}) | r['params_is'].get('sell', {}))}`\n")
         md.append(deep_dive(r))
 

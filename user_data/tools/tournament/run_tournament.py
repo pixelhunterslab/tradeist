@@ -70,7 +70,9 @@ def run_strategy(s: str) -> dict:
         z = slot(c.backtest, f"{s}/wf/{te_s}/test", s, f"{te_s}-{te_e}", risk, p)
         t = c.load_trades(z)
         eq = m.equity_curve(t, te_s, te_e)
-        return {"window": f"{te_s}-{te_e}", "params": json.loads(p.read_text())["params"],
+        pj = json.loads(p.read_text())
+        return {"window": f"{te_s}-{te_e}", "params": pj["params"],
+                "defaults_used": pj.get("defaults_used", False),
                 **m.period_metrics(t, eq, te_s, te_e)}
 
     with ThreadPoolExecutor(len(c.WF_WINDOWS)) as ex:
@@ -79,7 +81,8 @@ def run_strategy(s: str) -> dict:
     z_oos = slot(c.backtest, f"{s}/oos/{c.variant_name(risk)}", s, f"{c.IS_END}-{c.END}",
                  risk, params_is)
     m_is, m_oos = chosen["is"], evaluate(z_oos, c.IS_END, c.END)
-    return {"strategy": s, "params_is": json.loads(params_is.read_text())["params"],
+    pj = json.loads(params_is.read_text())
+    return {"strategy": s, "params_is": pj["params"], "defaults_used": pj.get("defaults_used", False),
             "chosen_variant": c.variant_name(risk), "risk": risk,
             "zip_is": chosen["zip_is"], "zip_oos": str(z_oos), "is": m_is, "oos": m_oos,
             "robustness": m.robustness(m_is, m_oos, wf), "walk_forward": wf, "grid": grid}
