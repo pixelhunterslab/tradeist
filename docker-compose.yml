@@ -1,6 +1,6 @@
 services:
   freqtrade:
-    # Pinned version: upgrade on purpose, never by accident.
+    # Sabit sürüm: bilerek güncellenir, asla kazara değil.
     image: freqtradeorg/freqtrade:2026.9
     container_name: freqtrade
     restart: unless-stopped
@@ -9,9 +9,9 @@ services:
         required: false
     volumes:
       - ./user_data:/freqtrade/user_data
-    # One-off commands (download-data, backtesting, ...) use
-    #   docker compose run --rm freqtrade <command> ...
-    # which replaces this default "trade" command.
+    # Tek seferlik komutlar (download-data, backtesting, ...) için:
+    #   docker compose run --rm freqtrade <komut> ...
+    # Bu, aşağıdaki varsayılan "trade" komutunun yerine geçer.
     command: >
       trade
       --logfile /freqtrade/user_data/logs/freqtrade.log

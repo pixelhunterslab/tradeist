@@ -2,29 +2,29 @@
     "$schema": "https://schema.freqtrade.io/schema.json",
     "bot_name": "futures-swing-bot",
 
-    // ===== Safety switch =====
-    // true  = paper trading (no real orders). This stays true until Phase 5.
+    // ===== Güvenlik anahtarı =====
+    // true = sanal işlem (gerçek emir yok). Aşama 5'e kadar true kalır.
     "dry_run": true,
     "dry_run_wallet": 100,
 
     // ===== Futures / margin =====
     "trading_mode": "futures",
     "margin_mode": "isolated",
-    // Freqtrade's own guard: the stoploss is kept at least 30% of the
-    // entry->liquidation distance away from the liquidation price.
+    // Freqtrade'in kendi koruması: stop, likidasyon fiyatından en az
+    // giriş->likidasyon mesafesinin %30'u kadar uzakta tutulur.
     "liquidation_buffer": 0.3,
 
-    // ===== Capital =====
+    // ===== Sermaye =====
     "stake_currency": "USDT",
-    // Real position size is calculated per trade by the strategy
-    // (risk-based sizing, see "swing_risk" below). "unlimited" just lets it.
+    // Gerçek pozisyon büyüklüğünü strateji her işlemde hesaplar
+    // (riske göre boyutlama, aşağıda "swing_risk"). "unlimited" buna izin verir.
     "stake_amount": "unlimited",
     "tradable_balance_ratio": 0.99,
     "max_open_trades": 3,
     "fiat_display_currency": "USD",
 
-    // ===== Our own risk rules (read by the shared strategy base class) =====
-    // Each value can also be overridden from .env, e.g.
+    // ===== Kendi risk kurallarımız (ortak strateji temel sınıfı okur) =====
+    // Her değer .env'den de değiştirilebilir, örn.
     //   FREQTRADE__SWING_RISK__LEVERAGE=3
     "swing_risk": {
         "leverage": 5,
@@ -35,7 +35,7 @@
         "atr_stop_multiplier": 2.5
     },
 
-    // ===== Orders =====
+    // ===== Emirler =====
     "order_types": {
         "entry": "market",
         "exit": "market",
@@ -43,11 +43,11 @@
         "force_entry": "market",
         "force_exit": "market",
         "stoploss": "market",
-        // Stop lives on Binance, so it protects you even if the bot is offline.
+        // Stop Binance'in üzerinde durur; bot kapalıyken bile seni korur.
         "stoploss_on_exchange": true,
         "stoploss_on_exchange_interval": 60,
-        // Trigger on mark price (same price Binance uses for liquidation),
-        // so short wicks on the last-traded price don't trigger it.
+        // Mark fiyatıyla tetiklenir (Binance likidasyonda da bunu kullanır),
+        // böylece son işlem fiyatındaki kısa iğneler stopu tetiklemez.
         "stoploss_price_type": "mark"
     },
     "entry_pricing": {
@@ -70,9 +70,9 @@
     },
     "cancel_open_orders_on_exit": false,
 
-    // ===== Exchange & pairs =====
-    // API key/secret come from .env (FREQTRADE__EXCHANGE__KEY / __SECRET).
-    // Final pair list is set after running user_data/tools/check_pairs.py.
+    // ===== Borsa & coinler =====
+    // API anahtarı/secret .env'den gelir (FREQTRADE__EXCHANGE__KEY / __SECRET).
+    // Son coin listesi user_data/tools/check_pairs.py çalıştırıldıktan sonra belirlenir.
     "exchange": {
         "name": "binance",
         "key": "",
@@ -95,7 +95,7 @@
     },
     "pairlists": [{"method": "StaticPairList"}],
 
-    // ===== Notifications / UI (configured in Phase 4) =====
+    // ===== Bildirimler / arayüz (Aşama 4'te ayarlanacak) =====
     "telegram": {"enabled": false, "token": "", "chat_id": ""},
 
     "dataformat_ohlcv": "feather",

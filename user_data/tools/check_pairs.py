@@ -1,22 +1,22 @@
 """
-Check which candidate pairs can be traded properly with a small account.
+Hangi aday coinlerin küçük bir hesapla düzgün işlem görebileceğini kontrol eder.
 
-Uses only PUBLIC Binance data (no API key needed). For every pair in the
-config's pair_whitelist it compares:
+Sadece HERKESE AÇIK Binance verisi kullanır (API anahtarı gerekmez). Config'deki
+pair_whitelist'teki her coin için şunları karşılaştırır:
 
-  * Binance's smallest allowed order (min notional / min quantity)
-  * the position size our risk rules would actually want to open
-    (risk-based size, capped by max margin per trade x leverage)
-  * 24h trading volume (liquidity)
+  * Binance'in izin verdiği en küçük emir (min notional / min miktar)
+  * risk kurallarımızın gerçekten açmak isteyeceği pozisyon büyüklüğü
+    (riske göre büyüklük, işlem başına max marjin x kaldıraç ile sınırlı)
+  * 24 saatlik işlem hacmi (likidite)
 
-Run inside the Freqtrade container:
+Freqtrade konteyneri içinde çalıştır:
   docker compose run --rm --entrypoint python freqtrade /freqtrade/user_data/tools/check_pairs.py
 
-Options:
-  --balance 100          account size in USDT (default: dry_run_wallet)
-  --min-volume 100e6     minimum 24h volume in USDT
-  --safety 1.2           Freqtrade adds reserves on top of the exchange
-                         minimum; we require min_notional * safety
+Seçenekler:
+  --balance 100          hesap büyüklüğü, USDT (varsayılan: dry_run_wallet)
+  --min-volume 100e6     en az 24s hacim, USDT
+  --safety 1.2           Freqtrade borsanın minimumunun üstüne pay ekler;
+                         biz min_notional * safety şartını arıyoruz
 """
 import argparse
 import sys
@@ -33,7 +33,7 @@ def atr_pct(exchange, symbol, timeframe, period):
     for prev, cur in zip(candles, candles[1:]):
         high, low, prev_close = cur[2], cur[3], prev[4]
         trs.append(max(high - low, abs(high - prev_close), abs(low - prev_close)) / cur[4])
-    # Simple average of the last `period * 5` true ranges: a stable "typical" ATR.
+    # Son `period * 5` true range'in basit ortalaması: istikrarlı, "tipik" bir ATR.
     recent = trs[-period * 5:]
     return sum(recent) / len(recent)
 
@@ -57,17 +57,17 @@ def main():
     ex.load_markets()
     tickers = ex.fetch_tickers()
 
-    print(f"Balance {balance:.0f} USDT | leverage {lev:g}x | max notional/trade "
-          f"{max_notional:.0f} USDT | risk/trade {risk_usdt:.2f} USDT | stop {mult:g}x ATR\n")
-    header = (f"{'pair':16}{'price':>11}{'vol24h(M)':>11}{'minNotional':>12}{'stepValue':>10}"
-              f"{'size@1h':>9}{'size@4h':>9}  verdict")
+    print(f"Bakiye {balance:.0f} USDT | kaldıraç {lev:g}x | işlem başına max pozisyon "
+          f"{max_notional:.0f} USDT | işlem başına risk {risk_usdt:.2f} USDT | stop {mult:g}x ATR\n")
+    header = (f"{'coin':16}{'fiyat':>11}{'hacim24s(M)':>12}{'minEmir':>10}{'adımDeğeri':>11}"
+              f"{'boyut@1s':>9}{'boyut@4s':>9}  karar")
     print(header)
     print("-" * len(header))
 
     ok_pairs = []
     for pair in cfg["exchange"]["pair_whitelist"]:
         if pair not in ex.markets:
-            print(f"{pair:16} not listed on Binance USD-M futures -> EXCLUDE")
+            print(f"{pair:16} Binance USD-M vadelide listelenmiyor -> ÇIKAR")
             continue
         m = ex.markets[pair]
         price = tickers[pair]["last"]
@@ -86,23 +86,23 @@ def main():
         reasons = []
         required = min_notional * args.safety
         if required > min(sizes):
-            reasons.append(f"min order {required:.0f} > planned size")
+            reasons.append(f"min emir {required:.0f} > planlanan büyüklük")
         elif required > 0.5 * max_notional:
-            reasons.append("min order uses >50% of max size (many skips)")
+            reasons.append("min emir, max büyüklüğün %50'sinden fazla (çok işlem atlanır)")
         if step_value > 0.1 * min(sizes):
-            reasons.append("quantity step too coarse for exact sizing")
+            reasons.append("miktar adımı hassas boyutlama için çok kaba")
         if vol < args.min_volume / 1e6:
-            reasons.append("low volume")
-        verdict = "OK" if not reasons else "EXCLUDE: " + "; ".join(reasons)
+            reasons.append("düşük hacim")
+        verdict = "UYGUN" if not reasons else "ÇIKAR: " + "; ".join(reasons)
         if not reasons:
             ok_pairs.append(pair)
 
-        print(f"{pair:16}{price:>11.4g}{vol:>11.0f}{min_notional:>12.2f}{step_value:>10.2f}"
+        print(f"{pair:16}{price:>11.4g}{vol:>12.0f}{min_notional:>10.2f}{step_value:>11.2f}"
               f"{sizes[0]:>9.0f}{sizes[1]:>9.0f}  {verdict}")
 
-    print("\nsize@1h / size@4h = position size (USDT notional) our risk rules would open "
-          "with a typical ATR stop on that timeframe.")
-    print("\nSuggested pair_whitelist:")
+    print("\nboyut@1s / boyut@4s = o zaman diliminde tipik bir ATR stopuyla risk kurallarımızın "
+          "açacağı pozisyon büyüklüğü (USDT).")
+    print("\nÖnerilen pair_whitelist:")
     print("  " + ",\n  ".join(f'"{p}"' for p in ok_pairs))
     return 0
 

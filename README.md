@@ -1,133 +1,140 @@
-# Futures Swing Bot (Freqtrade + Docker)
+# Futures Swing Botu (Freqtrade + Docker)
 
-Automated swing-trading bot for **Binance USDⓈ-M Futures** (isolated margin, long + short),
-built on [Freqtrade](https://www.freqtrade.io) and run with Docker.
+**Binance USDⓈ-M Vadeli İşlemler** (izole marjin, long + short) için otomatik swing-trading botu.
+[Freqtrade](https://www.freqtrade.io) üzerine kurulu, Docker ile çalışır.
 
-> **Safety default:** the bot runs in **dry-run (paper trading)** mode. No real orders are
-> placed until `dry_run` is switched off on purpose (Phase 5, needs your explicit approval).
+> **Güvenlik varsayılanı:** Bot **dry-run (kağıt üzerinde / sanal işlem)** modunda çalışır.
+> `dry_run` bilinçli olarak kapatılana kadar (Aşama 5, senin açık onayınla) **gerçek emir
+> gönderilmez.**
 
-## Folder layout
+## Klasör yapısı
 
 ```
 futures-swing-bot/
-├── docker-compose.yml        # runs the official Freqtrade image (pinned version)
-├── .env.example              # template for secrets -> copy to .env (git-ignored)
+├── docker-compose.yml        # resmi Freqtrade imajını çalıştırır (sabit sürüm)
+├── .env.example              # gizli bilgiler için şablon -> .env olarak kopyala (git'e girmez)
 ├── scripts/
-│   ├── download_data.ps1     # download history (Windows PowerShell)
-│   └── download_data.sh      # same, for Linux / VPS
+│   ├── download_data.ps1     # geçmiş veriyi indir (Windows PowerShell)
+│   └── download_data.sh      # aynısı, Linux / VPS için
 ├── user_data/
-│   ├── config.json           # all bot settings (no secrets in here)
-│   ├── strategies/           # strategy files (Phase 2)
-│   ├── tools/check_pairs.py  # checks which pairs fit a ~100 USDT account
-│   ├── data/                 # downloaded market data (git-ignored)
-│   └── logs/                 # bot logs (git-ignored)
-└── reports/                  # backtest reports, checklists
+│   ├── config.json           # tüm bot ayarları (içinde gizli bilgi YOK)
+│   ├── strategies/           # strateji dosyaları (Aşama 2)
+│   ├── tools/check_pairs.py  # hangi coinlerin ~100 USDT hesaba uygun olduğunu kontrol eder
+│   ├── data/                 # indirilen piyasa verisi (git'e girmez)
+│   └── logs/                 # bot kayıtları (git'e girmez)
+└── reports/                  # backtest raporları, kontrol listeleri
 ```
 
-## Quick start (Windows, Docker Desktop)
+## Hızlı başlangıç (Windows, Docker Desktop)
 
-Open **PowerShell** in the project folder:
+Proje klasöründe **PowerShell** aç:
 
 ```powershell
-Copy-Item .env.example .env          # then edit .env in Notepad (keys can stay empty for now)
-docker compose pull                  # download the Freqtrade image
-.\scripts\download_data.ps1          # download historical data (takes a while)
+Copy-Item .env.example .env          # sonra .env'yi Not Defteri ile düzenle (anahtarlar şimdilik boş kalabilir)
+docker compose pull                  # Freqtrade imajını indir
+.\scripts\download_data.ps1          # geçmiş veriyi indir (biraz sürer)
 docker compose run --rm --entrypoint python freqtrade /freqtrade/user_data/tools/check_pairs.py
 ```
 
-On Linux/VPS use `cp .env.example .env` and `./scripts/download_data.sh`.
+Linux/VPS'te `cp .env.example .env` ve `./scripts/download_data.sh` kullan.
 
-## Where settings live
+## Ayarlar nerede?
 
-| What | Where |
+| Ne | Nerede |
 |---|---|
-| Dry-run vs live, pairs, max open trades, order types | `user_data/config.json` |
-| Risk rules (leverage, max loss per trade, margin cap, ATR stop) | `user_data/config.json` → `"swing_risk"` |
-| Secrets (API keys, Telegram, UI password) | `.env` only |
+| Dry-run / gerçek mod, coinler, en fazla açık işlem, emir tipleri | `user_data/config.json` |
+| Risk kuralları (kaldıraç, işlem başına en fazla zarar, marjin sınırı, ATR stop) | `user_data/config.json` → `"swing_risk"` |
+| Gizli bilgiler (API anahtarları, Telegram, arayüz şifresi) | sadece `.env` |
 
-Any setting can also be overridden from `.env` with the pattern `FREQTRADE__SECTION__KEY`,
-e.g. `FREQTRADE__SWING_RISK__LEVERAGE=3` or `FREQTRADE__MAX_OPEN_TRADES=2`.
+Her ayar `.env` içinden `FREQTRADE__BOLUM__ANAHTAR` kalıbıyla değiştirilebilir. Örnekler:
+`FREQTRADE__SWING_RISK__LEVERAGE=3` veya `FREQTRADE__MAX_OPEN_TRADES=2`.
 
-## Creating the Binance API key
+## Binance API anahtarı oluşturma
 
-You don't need a key for backtesting or downloading data. Create it when we reach the
-dry-run/live phases.
+Backtest veya veri indirmek için anahtar **gerekmez**. Dry-run/gerçek işlem aşamasına
+gelince oluşturursun.
 
-1. Log in to **binance.com** → profile icon → **API Management** → **Create API** →
-   *System generated* (HMAC). Give it a label like `freqtrade-bot`.
-2. Complete the security verification. Copy the **API Key** and **Secret Key**. The secret is
-   shown **only once**.
-3. Click **Edit restrictions** and set:
-   - ✅ **Enable Reading**
-   - ✅ **Enable Futures** (this is what lets the bot trade USDⓈ-M futures)
-   - ✅ Enable Spot & Margin Trading: **not needed**, leave it off
-   - ❌ **Enable Withdrawals: must stay OFF.** With withdrawals off, a leaked key can't move
-     your money out of the account.
-   - ❌ Leave everything else off (Internal Transfer, Universal Transfer, Options, etc.).
-4. **IP access restriction:**
-   - On your home PC your IP usually changes, so you may have to choose *Unrestricted* for now.
-     Binance may then periodically disable trading permissions on unrestricted keys. If the bot
-     suddenly gets permission errors, this is the reason.
-   - **On the VPS (Phase 6): always choose "Restrict access to trusted IPs only"** and enter
-     the VPS's public IP. Then the key is useless from any other computer.
-5. Put the key into `.env` (never anywhere else):
+1. **binance.com**'a giriş yap → profil simgesi → **API Yönetimi** → **API Oluştur** →
+   *Sistem tarafından oluşturulan* (HMAC). Adı mesela `freqtrade-bot` olsun.
+2. Güvenlik doğrulamasını tamamla. **API Key** ve **Secret Key**'i kopyala. Secret
+   **sadece bir kez** gösterilir.
+3. **Kısıtlamaları düzenle**'ye tıkla ve şunları ayarla:
+   - ✅ **Okumayı etkinleştir** (Enable Reading)
+   - ✅ **Vadeli işlemleri etkinleştir** (Enable Futures): botun USDⓈ-M vadeli işlem
+     yapabilmesini sağlayan ayar bu
+   - ✅ Spot & Marjin işlemleri: **gerekmez**, kapalı bırak
+   - ❌ **Para çekmeyi etkinleştir (Enable Withdrawals): KESİNLİKLE KAPALI kalmalı.** Böylece
+     anahtar çalınsa bile kimse hesaptan para çekemez.
+   - ❌ Diğer her şeyi kapalı bırak (iç transfer, evrensel transfer, opsiyonlar vb.).
+4. **IP erişim kısıtlaması:**
+   - Ev bilgisayarında IP adresin genelde değişir. Bu yüzden şimdilik *Kısıtlamasız*
+     seçmen gerekebilir. Binance kısıtlamasız anahtarların işlem iznini zaman zaman
+     kapatabilir. Bot bir gün aniden "izin" hatası verirse sebebi budur.
+   - **VPS'te (Aşama 6): mutlaka "Sadece güvenilir IP'lere izin ver"** seç ve VPS'in genel IP
+     adresini gir. Böylece anahtar başka hiçbir bilgisayardan kullanılamaz.
+5. Anahtarı `.env` dosyasına yaz (başka hiçbir yere değil):
    ```
-   FREQTRADE__EXCHANGE__KEY=your_key
-   FREQTRADE__EXCHANGE__SECRET=your_secret
+   FREQTRADE__EXCHANGE__KEY=senin_anahtarin
+   FREQTRADE__EXCHANGE__SECRET=senin_secretin
    ```
-6. Futures account settings (Binance web → Futures → ⚙ Preferences). Freqtrade requires:
-   - **Position Mode: One-way** (not Hedge mode)
-   - **Asset Mode: Single-Asset** (not Multi-Assets)
-   - Margin mode and leverage are set **per trade by the bot** (isolated, max 5x). You don't
-     need to set them manually.
-7. Move your USDT from the Spot wallet to the **USDⓈ-M Futures** wallet (Wallet → Transfer).
+6. Vadeli işlem hesabı ayarları (Binance web → Vadeli → ⚙ Tercihler). Freqtrade şunları ister:
+   - **Pozisyon Modu: Tek yönlü (One-way)**, Hedge modu DEĞİL
+   - **Varlık Modu: Tek varlık (Single-Asset)**, Çoklu varlık (Multi-Assets) DEĞİL
+   - Marjin modu ve kaldıracı **bot her işlemde kendisi ayarlar** (izole, en fazla 5x).
+     Elle ayarlaman gerekmez.
+7. USDT'ni Spot cüzdandan **USDⓈ-M Vadeli** cüzdana aktar (Cüzdan → Transfer).
 
-## Access from Turkey: things to check on your account
+## Türkiye'den erişim: hesabında kontrol etmen gerekenler
 
-I can't see your account or check Binance's current rules for you, so please confirm these
-yourself before Phase 4/5:
+Hesabını göremiyorum ve Binance'in güncel kurallarını senin yerine kontrol edemiyorum.
+Aşama 4/5'ten önce şunları kendin doğrula:
 
-1. **Right platform.** You need a **Binance.com (global)** account. **Binance TR**
-   (binance.tr) is a separate company with separate API keys, and it does not offer USDⓈ-M
-   perpetual futures. Keys from Binance TR won't work here.
-2. **Futures actually available to you.** Turkey's crypto law (Law No. 7518, 2024) requires
-   crypto platforms serving Turkish residents to be licensed by the SPK (Capital Markets
-   Board). This has led platforms to restrict or change products for Turkish users. Check:
-   - Can you open the USDⓈ-M Futures page and is your futures account activated (the short
-     quiz done)?
-   - Does **Enable Futures** appear and stay ticked when you edit the API key?
-   - Look at your notifications/emails from Binance for any announcement about derivatives
-     restrictions or account migration for Turkish residents.
-   - If Binance limits your leverage (some regions/new accounts get a lower maximum), tell me.
-     The 5x default would then need lowering.
-3. **KYC level.** Futures and API trading require completed identity verification.
-4. **Tax / legal.** Gains from crypto trading may be taxable in Turkey. That's your
-   responsibility; I can't advise on it.
+1. **Doğru platform.** **Binance.com (global)** hesabı gerekiyor. **Binance TR**
+   (binance.tr) ayrı bir şirket ve API anahtarları da ayrı. Bildiğim kadarıyla USDⓈ-M
+   vadeli işlem sunmuyor. Binance TR anahtarları burada çalışmaz.
+2. **Vadeli işlemler sana gerçekten açık mı?** Türkiye'nin kripto yasası (7518 sayılı
+   Kanun, 2024), Türkiye'de yaşayanlara hizmet veren kripto platformlarının SPK lisansı
+   almasını şart koşuyor. Bu yüzden platformlar Türk kullanıcılar için bazı ürünleri
+   kısıtlayabiliyor. Kontrol et:
+   - USDⓈ-M Vadeli sayfasını açabiliyor musun, vadeli hesabın aktif mi (kısa test
+     tamamlandı mı)?
+   - API anahtarını düzenlerken **Vadeli işlemleri etkinleştir** seçeneği görünüyor ve
+     işaretli kalıyor mu?
+   - Binance'ten Türkiye'de yaşayanlar için türev ürün kısıtlaması veya hesap taşıma
+     hakkında bir bildirim/e-posta geldi mi?
+   - Binance kaldıracını sınırlıyorsa (bazı bölgelerde/yeni hesaplarda üst sınır daha
+     düşük olabiliyor) bana söyle. O zaman 5x varsayılanını düşürmemiz gerekir.
+3. **Kimlik doğrulama (KYC).** Vadeli işlem ve API ile işlem için kimlik doğrulamanın
+   tamamlanmış olması gerekir.
+4. **Vergi / hukuk.** Kripto işlem kazançları Türkiye'de vergiye tabi olabilir. Bu senin
+   sorumluluğunda, bu konuda tavsiye veremem.
 
-Quick technical test once you have a key (works in dry-run, places no orders):
+Anahtarı aldıktan sonra hızlı teknik test (emir göndermez):
 ```powershell
 docker compose run --rm freqtrade list-markets --config /freqtrade/user_data/config.json --trading-mode futures --quote USDT -1 | Select-Object -First 5
 ```
-If that works but trading later fails with an error like "not eligible", "restricted" or
-"-2015 Invalid API-key, IP, or permissions", it's an account or region restriction, not a bot
-problem.
+Bu çalışıyor ama işlem açarken "not eligible", "restricted" veya
+"-2015 Invalid API-key, IP, or permissions" gibi bir hata geliyorsa, sorun bot değil,
+hesap veya bölge kısıtlamasıdır.
 
-## Historical data
+## Geçmiş veri
 
-`scripts/download_data.ps1` (or `.sh`) downloads, for every pair in `config.json`:
+`scripts/download_data.ps1` (veya `.sh`), `config.json`'daki her coin için şunları indirir:
 
-- candles **15m, 1h, 4h, 1d** from Sept 2019 (start of Binance perpetuals) or the pair's
-  listing date until now. 1h/4h are the strategy timeframes, 1d is for the higher-timeframe
-  trend filter, and 15m is used in backtests to simulate stop/trailing fills more realistically.
-- **mark price** and **funding rate** history. Freqtrade downloads these automatically in
-  futures mode, and backtests need them for liquidation prices and funding fees.
+- **15dk, 1s, 4s, 1g** mumları: Eylül 2019'dan (Binance perpetual'larının başlangıcı) veya
+  coinin listelenme tarihinden bugüne kadar. 1s/4s strateji zaman dilimleri, 1g üst zaman
+  dilimindeki trend filtresi için. 15dk ise backtestlerde stop/trailing dolumlarını daha
+  gerçekçi simüle etmek için kullanılır.
+- **Mark fiyatı** ve **funding (fonlama) oranı** geçmişi. Freqtrade bunları vadeli modda
+  otomatik indirir. Backtestlerde likidasyon fiyatı ve funding ücretlerini hesaplamak için
+  gerekli.
 
-Re-run the script any time to add the newest candles.
+Yeni mumları eklemek için scripti istediğin zaman tekrar çalıştır.
 
-## Choosing pairs
+## Coin seçimi
 
-`user_data/tools/check_pairs.py` reads Binance's live order limits and compares them with what
-our risk rules would actually trade on a ~100 USDT account (5% risk per trade, max 25% margin,
-5x). Pairs whose minimum order is too large (BTC is the usual problem: min quantity 0.001
-BTC) or whose volume is too low are marked `EXCLUDE`. Copy the suggested list into
-`exchange.pair_whitelist` in `config.json`.
+`user_data/tools/check_pairs.py`, Binance'in güncel emir limitlerini okur ve bunları risk
+kurallarımızın ~100 USDT hesapta gerçekten açacağı pozisyon büyüklüğüyle karşılaştırır
+(işlem başına %5 risk, en fazla %25 marjin, 5x). En küçük emri çok büyük olan (genelde BTC:
+en az 0.001 BTC) veya işlem hacmi düşük olan coinler `ÇIKAR` olarak işaretlenir. Önerilen
+listeyi `config.json` içindeki `exchange.pair_whitelist`'e kopyala.

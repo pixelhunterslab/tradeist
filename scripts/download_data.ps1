@@ -1,4 +1,4 @@
-# Windows PowerShell version of download_data.sh (same behaviour).
+# download_data.sh'in Windows PowerShell sürümü (aynı işi yapar).
 $ErrorActionPreference = "Stop"
 Set-Location (Join-Path $PSScriptRoot "..")
 docker compose run --rm freqtrade download-data `
