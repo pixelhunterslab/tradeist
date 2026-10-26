@@ -22,7 +22,9 @@ CONFIGS = ["--config", str(UD / "config.json"), "--config", str(UD / "config.bac
 STRATEGIES = ["EmaAdxTrend", "DonchianBreakout", "SupertrendTrend", "RsiBbMeanReversion"]
 # Göstergeleri parametreye göre populate_indicators içinde hesaplayan stratejiler
 # hyperopt'ta her denemede yeniden hesaplanmalı.
-ANALYZE_PER_EPOCH = {"SupertrendTrend", "RsiBbMeanReversion"}
+ANALYZE_PER_EPOCH = {"SupertrendTrend", "RsiBbMeanReversion", "ComboTrend"}
+# Bir stratejinin import ettiği diğer strateji dosyaları.
+DEPENDENCIES = {"ComboTrend": ["SupertrendTrend.py"]}
 
 # ---- Dönemler ----
 START = "20200301"      # veri 2020-01'de başlıyor; ilk 2 ay göstergelerin ısınması için
@@ -66,7 +68,7 @@ def _prepare(run: str, strategy: str, risk: dict | None, params: Path | None) ->
     sdir.mkdir(parents=True, exist_ok=True)
     (d / "userdir").mkdir(exist_ok=True)
     (d / "bt").mkdir(exist_ok=True)
-    for f in ("swing_risk.py", f"{strategy}.py"):
+    for f in ("swing_risk.py", f"{strategy}.py", *DEPENDENCIES.get(strategy, [])):
         shutil.copy(STRAT_SRC / f, sdir / f)
     if params:
         shutil.copy(params, sdir / f"{strategy}.json")

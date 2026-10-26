@@ -50,7 +50,7 @@ def table(headers, rows) -> str:
 
 def load_results() -> list[dict]:
     files = sorted((c.OUT / "results").glob("*.json"))
-    order = {s: i for i, s in enumerate(c.STRATEGIES + ["ComboStrategy"])}
+    order = {s: i for i, s in enumerate(c.STRATEGIES + ["ComboTrend"])}
     res = [json.loads(f.read_text()) for f in files]
     return sorted(res, key=lambda r: order.get(r["strategy"], 99))
 
