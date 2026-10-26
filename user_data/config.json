@@ -32,7 +32,15 @@
         "max_loss_per_trade_pct_of_balance": 5.0,
         "max_margin_per_trade_pct_of_balance": 25.0,
         "atr_period": 14,
-        "atr_stop_multiplier": 2.5
+        "atr_stop_multiplier": 2.5,
+        // Stop en az fiyatın bu %'si kadar uzakta olur (veri boşluklarına karşı).
+        "min_stop_distance_pct": 1.0,
+        // Çıkış: "trailing" = kâr 1R'ye ulaşınca stop fiyatı ATR mesafesinden takip eder
+        //        "fixed_tp" = fiyat take_profit_rr x risk kadar gidince kâr al
+        "exit_mode": "trailing",
+        "take_profit_rr": 2.0,
+        "trail_activation_rr": 1.0,
+        "trail_atr_multiplier": 2.5
     },
 
     // ===== Emirler =====

@@ -150,6 +150,26 @@ docker compose run --rm --entrypoint python freqtrade /freqtrade/user_data/tools
 vermiyor. LINK, AVAX, LTC düşük hacim nedeniyle elendi. 24 saatlik hacim tek günün
 verisidir; sınırdaki coinler (LINK) başka bir gün geçebilir.
 
+## Stratejiler (Aşama 2)
+
+Hepsi long + short açabilir, parametre sayısı az (2-3), ve aynı ortak risk kurallarını
+`user_data/strategies/swing_risk.py` dosyasından alır (kopyala-yapıştır yok).
+
+| Strateji | Zaman dilimi | Ne zaman girer | Ne zaman çıkar |
+|---|---|---|---|
+| `EmaAdxTrend` | 4s | Hızlı EMA yavaşı keser + ADX güçlü trend der | Ters kesişim |
+| `DonchianBreakout` | 4s | Fiyat son N mumun zirvesini/dibini hacimle kırar | Kısa kanalın ters ucu kırılır |
+| `SupertrendTrend` | 4s | Supertrend yön değiştirir | Supertrend ters döner |
+| `RsiBbMeanReversion` | 1s (+4s trend) | 4s trend yönünde, 1s'te aşırı düşüş/yükseliş (RSI + Bollinger) | Fiyat Bollinger ortasına döner |
+
+**Ortak risk kuralları** (`config.json` → `swing_risk`):
+- **Stop:** giriş ± `atr_stop_multiplier` × ATR, en az `min_stop_distance_pct` %. Stop Binance'te durur.
+- **Pozisyon büyüklüğü:** stop olursa kayıp bakiyenin en fazla `max_loss_per_trade_pct_of_balance` %'si.
+- **Sınırlar:** marjin en fazla bakiyenin `max_margin_per_trade_pct_of_balance` %'si, kaldıraç en fazla
+  `max_leverage`. Stop likidasyona fazla yakın kalacaksa kaldıraç o işlem için otomatik düşürülür.
+- **Çıkış modu** (`exit_mode`): `trailing` (kâr 1R'yi geçince stop ATR mesafesinden takip eder) veya
+  `fixed_tp` (`take_profit_rr` × risk kadar kârda kapat).
+
 ## Binance API'sine erişilemiyorsa (çevrimdışı mod)
 
 Binance'in canlı API'si bazı ülkelerden/sunuculardan kapalıdır (HTTP 451). Backtest için

@@ -20,7 +20,6 @@ user_data/freqaimodels/
 user_data/models/
 user_data/*.lock
 user_data/.last_result.json
-user_data/strategies/*.json
 
 # ---- Market data (large, re-downloadable) ----
 user_data/data/*
