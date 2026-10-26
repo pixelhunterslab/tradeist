@@ -119,17 +119,20 @@ hesap veya bölge kısıtlamasıdır.
 
 ## Geçmiş veri
 
-`scripts/download_data.ps1` (veya `.sh`), `config.json`'daki her coin için şunları indirir:
+`scripts/download_data.ps1` (veya `.sh`), `config.json`'daki her coin için Binance'in
+herkese açık veri arşivinden (data.binance.vision) şunları indirir:
 
-- **15dk, 1s, 4s, 1g** mumları: Eylül 2019'dan (Binance perpetual'larının başlangıcı) veya
-  coinin listelenme tarihinden bugüne kadar. 1s/4s strateji zaman dilimleri, 1g üst zaman
-  dilimindeki trend filtresi için. 15dk ise backtestlerde stop/trailing dolumlarını daha
-  gerçekçi simüle etmek için kullanılır.
-- **Mark fiyatı** ve **funding (fonlama) oranı** geçmişi. Freqtrade bunları vadeli modda
-  otomatik indirir. Backtestlerde likidasyon fiyatı ve funding ücretlerini hesaplamak için
-  gerekli.
+- **15dk, 1s, 4s, 1g** mumları: Ocak 2020'den (arşivin başlangıcı) veya coinin listelenme
+  tarihinden dünün sonuna kadar. 1s/4s strateji zaman dilimleri, 1g üst zaman dilimindeki
+  trend filtresi için. 15dk ise backtestlerde stop/trailing dolumlarını daha gerçekçi simüle
+  etmek için kullanılır.
+- **Mark fiyatı** (1s) ve **funding (fonlama) oranı** geçmişi. Backtestlerde likidasyon
+  fiyatı ve funding ücretlerini hesaplamak için gerekli. Funding arşivi sadece aylık
+  yayınlanıyor, yani içinde bulunduğumuz ayın funding verisi ay bitince eklenir.
 
-Yeni mumları eklemek için scripti istediğin zaman tekrar çalıştır.
+Arşiv kullanılmasının sebebi: Binance'in canlı API'si bazı sunuculardan/ülkelerden erişime
+kapalı (HTTP 451), arşiv ise her yerden erişilebilir ve aynı veriyi içerir. Yeni mumları
+eklemek için scripti istediğin zaman tekrar çalıştır; sadece eksik dosyalar indirilir.
 
 ## Coin seçimi
 
