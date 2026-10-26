@@ -136,8 +136,30 @@ eklemek için scripti istediğin zaman tekrar çalıştır; sadece eksik dosyala
 
 ## Coin seçimi
 
-`user_data/tools/check_pairs.py`, Binance'in güncel emir limitlerini okur ve bunları risk
+`user_data/tools/check_pairs.py`, Binance'in emir limitlerini okur ve bunları risk
 kurallarımızın ~100 USDT hesapta gerçekten açacağı pozisyon büyüklüğüyle karşılaştırır
-(işlem başına %5 risk, en fazla %25 marjin, 5x). En küçük emri çok büyük olan (genelde BTC:
-en az 0.001 BTC) veya işlem hacmi düşük olan coinler `ÇIKAR` olarak işaretlenir. Önerilen
-listeyi `config.json` içindeki `exchange.pair_whitelist`'e kopyala.
+(işlem başına %5 risk, en fazla %25 marjin, 5x). En küçük emri çok büyük olan veya işlem
+hacmi düşük olan coinler `ÇIKAR` olarak işaretlenir.
+
+```powershell
+docker compose run --rm --entrypoint python freqtrade /freqtrade/user_data/tools/check_pairs.py
+```
+
+**Sonuç (26.10.2026):** ETH, SOL, XRP, BNB, DOGE, ADA uygun. BTC elendi: en küçük emir
+0.001 BTC ≈ 80 USDT ve bu, en fazla 125 USDT'lik pozisyonla hassas boyutlamaya izin
+vermiyor. LINK, AVAX, LTC düşük hacim nedeniyle elendi. 24 saatlik hacim tek günün
+verisidir; sınırdaki coinler (LINK) başka bir gün geçebilir.
+
+## Binance API'sine erişilemiyorsa (çevrimdışı mod)
+
+Binance'in canlı API'si bazı ülkelerden/sunuculardan kapalıdır (HTTP 451). Backtest için
+gereken işlem kuralları o zaman `user_data/market_snapshot/` içindeki dosyalardan okunur
+(tarayıcıda kaydedilmiş `fapi/v1/exchangeInfo` ve `fapi/v1/ticker/24hr`):
+
+```powershell
+docker compose run --rm --entrypoint python freqtrade /freqtrade/user_data/tools/ft_offline.py backtesting --strategy ...
+docker compose run --rm --entrypoint python freqtrade /freqtrade/user_data/tools/check_pairs.py --offline
+```
+
+`ft_offline.py` sadece backtest/analiz komutlarını çalıştırır; botu işlem modunda
+başlatmayı reddeder. Gerçek bot her zaman canlı Binance bilgisini kullanır.

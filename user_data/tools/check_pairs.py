@@ -17,18 +17,38 @@ Seçenekler:
   --min-volume 100e6     en az 24s hacim, USDT
   --safety 1.2           Freqtrade borsanın minimumunun üstüne pay ekler;
                          biz min_notional * safety şartını arıyoruz
+  --offline              Binance API'si yerine user_data/market_snapshot/
+                         dosyalarını kullan (API erişilemiyorsa)
+
+ATR (oynaklık) indirilmiş geçmiş veriden hesaplanır; veri yoksa API'den alınır.
 """
 import argparse
+import json
 import sys
+from pathlib import Path
 
 import ccxt
 from freqtrade.configuration.load_config import load_config_file
+from freqtrade.data.history import load_pair_history
+from freqtrade.enums import CandleType
+
+from ft_offline import SNAPSHOT, patch_binance
 
 CONFIG = "/freqtrade/user_data/config.json"
+TICKERS = Path("/freqtrade/user_data/market_snapshot/ticker_24hr.json")
+DATADIR = Path("/freqtrade/user_data/data/binance")
+
+
+def recent_candles(exchange, symbol, timeframe, limit):
+    df = load_pair_history(pair=symbol, timeframe=timeframe, datadir=DATADIR,
+                           candle_type=CandleType.FUTURES)
+    if not df.empty:
+        return df[["date", "open", "high", "low", "close", "volume"]].tail(limit).values.tolist()
+    return exchange.fetch_ohlcv(symbol, timeframe, limit=limit)
 
 
 def atr_pct(exchange, symbol, timeframe, period):
-    candles = exchange.fetch_ohlcv(symbol, timeframe, limit=period * 10)
+    candles = recent_candles(exchange, symbol, timeframe, period * 10)
     trs = []
     for prev, cur in zip(candles, candles[1:]):
         high, low, prev_close = cur[2], cur[3], prev[4]
@@ -45,6 +65,7 @@ def main():
     ap.add_argument("--balance", type=float, default=float(cfg.get("dry_run_wallet", 100)))
     ap.add_argument("--min-volume", type=float, default=100e6)
     ap.add_argument("--safety", type=float, default=1.2)
+    ap.add_argument("--offline", action="store_true")
     args = ap.parse_args()
 
     balance = args.balance
@@ -53,9 +74,19 @@ def main():
     risk_usdt = balance * risk["max_loss_per_trade_pct_of_balance"] / 100
     mult = float(risk["atr_stop_multiplier"])
 
+    if args.offline:
+        snapshot = json.loads(SNAPSHOT.read_text())
+        patch_binance(snapshot)
+        print(f"(Çevrimdışı mod: {SNAPSHOT.name} ve {TICKERS.name} kullanılıyor)")
     ex = ccxt.binanceusdm({"enableRateLimit": True})
     ex.load_markets()
-    tickers = ex.fetch_tickers()
+    if args.offline:
+        by_id = {m["id"]: sym for sym, m in ex.markets.items()}
+        tickers = {by_id[t["symbol"]]: {"last": float(t["lastPrice"]),
+                                        "quoteVolume": float(t["quoteVolume"])}
+                   for t in json.loads(TICKERS.read_text()) if t["symbol"] in by_id}
+    else:
+        tickers = ex.fetch_tickers()
 
     print(f"Bakiye {balance:.0f} USDT | kaldıraç {lev:g}x | işlem başına max pozisyon "
           f"{max_notional:.0f} USDT | işlem başına risk {risk_usdt:.2f} USDT | stop {mult:g}x ATR\n")

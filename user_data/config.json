@@ -72,24 +72,21 @@
 
     // ===== Borsa & coinler =====
     // API anahtarı/secret .env'den gelir (FREQTRADE__EXCHANGE__KEY / __SECRET).
-    // Son coin listesi user_data/tools/check_pairs.py çalıştırıldıktan sonra belirlenir.
     "exchange": {
         "name": "binance",
         "key": "",
         "secret": "",
         "ccxt_config": {},
         "ccxt_async_config": {},
+        // check_pairs.py sonucu (26.10.2026): BTC (min emir çok büyük), LINK, AVAX,
+        // LTC (düşük hacim) elendi.
         "pair_whitelist": [
-            "BTC/USDT:USDT",
             "ETH/USDT:USDT",
             "SOL/USDT:USDT",
             "XRP/USDT:USDT",
             "BNB/USDT:USDT",
             "DOGE/USDT:USDT",
-            "ADA/USDT:USDT",
-            "LINK/USDT:USDT",
-            "AVAX/USDT:USDT",
-            "LTC/USDT:USDT"
+            "ADA/USDT:USDT"
         ],
         "pair_blacklist": []
     },
