@@ -32,7 +32,7 @@
         "max_loss_per_trade_pct_of_balance": 5.0,
         "max_margin_per_trade_pct_of_balance": 25.0,
         "atr_period": 14,
-        "atr_stop_multiplier": 2.5,
+        "atr_stop_multiplier": 3.0,   // Aşama 3 turnuvası sonucu
         // Stop en az fiyatın bu %'si kadar uzakta olur (veri boşluklarına karşı).
         "min_stop_distance_pct": 1.0,
         // Çıkış: "trailing" = kâr 1R'ye ulaşınca stop fiyatı ATR mesafesinden takip eder
@@ -40,7 +40,7 @@
         "exit_mode": "trailing",
         "take_profit_rr": 2.0,
         "trail_activation_rr": 1.0,
-        "trail_atr_multiplier": 2.5
+        "trail_atr_multiplier": 3.0
     },
 
     // ===== Korumalar (Freqtrade protections; strateji bu değerleri okur) =====
